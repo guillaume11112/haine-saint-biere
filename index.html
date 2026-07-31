@@ -36,7 +36,25 @@
     }
 
 }
+@media screen and (max-width: 600px){
 
+    nav ul{
+        flex-direction:row;
+        flex-wrap:wrap;
+        justify-content:center;
+        padding:0;
+        margin:0;
+    }
+
+    nav li{
+        padding:6px 8px;
+    }
+
+    nav a{
+        font-size:14px;
+    }
+}
+	
 @media screen and (max-width:768px){
 
     header{
@@ -55,15 +73,6 @@
     button{
         width:90%;
         max-width:300px;
-    }
-
-    nav ul{
-        flex-direction:column;
-        align-items:center;
-    }
-
-    nav li{
-        padding:12px;
     }
 
     section{
