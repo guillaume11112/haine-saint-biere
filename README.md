@@ -1,2 +1,2 @@
-# haine-saint-bi-re
+# haine-saint-bière
 Site officiel de Haine-Saint-Bière
