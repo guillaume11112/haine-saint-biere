@@ -6,7 +6,7 @@
 
 /* ----------------------------------------------------------
    Positions GPS des partenaires (recherche par distance)
-   Clé = adresse telle qu'écrite dans data-adresses (index.html).
+   Clé = adresse telle qu'écrite dans PARTENAIRES (juste en dessous).
    Pour la remplir en une fois : ouvre la page avec « ?coordonnees »
    à la fin de l'adresse (ex. index.html?coordonnees), attends la fin du
    calcul, puis remplace la ligne ci-dessous par le texte proposé.
@@ -14,6 +14,106 @@
    (plus lent, une seule fois par visiteur).
    ---------------------------------------------------------- */
 var COORDONNEES = {};
+
+/* ----------------------------------------------------------
+   Liste des partenaires (utilisée par la recherche par distance)
+   Pour en ajouter un : copie un bloc { ... }, change le nom, l'image,
+   l'adresse (avec code postal et commune) et le lien (ou null s'il n'y en a pas),
+   puis relance l'outil « index.html?coordonnees » (voir ci-dessus).
+   ---------------------------------------------------------- */
+var PARTENAIRES = [
+    {
+        nom: "Chez Raymond - Nathalie et Giovanni",
+        image: "image/raymond.jpeg",
+        adresses: [
+            "Rue des Combattants 50, 7100 La Louvière"
+        ],
+        lien: "https://www.facebook.com/p/Chez-Raymond-Nathalie-Giovanni-100063481123877/?locale=fr_FR"
+    },
+    {
+        nom: "Le chalet des étangs",
+        image: "image/chalet.jpeg",
+        adresses: [
+            "Rue des Étangs 9, 7100 La Louvière"
+        ],
+        lien: "https://www.facebook.com/profile.php?id=100063470713775#"
+    },
+    {
+        nom: "Ferme Legat, grange gourmande",
+        image: "image/fermel.jpeg",
+        adresses: [
+            "Rue de Binche 33, 7120 Estinnes"
+        ],
+        lien: "https://fermelegat.be/"
+    },
+    {
+        nom: "Au sourire de la crémière - Ferme de la Ravisée",
+        image: "image/creme.png",
+        adresses: [
+            "Chaussée de Nivelles 2, 7181 Seneffe"
+        ],
+        lien: "https://www.facebook.com/p/Au-sourire-de-la-Cr%C3%A9mi%C3%A8re-Ferme-de-la-Ravis%C3%A9e-100069854415944/?locale=fr_FR"
+    },
+    {
+        nom: "La Voisine – Épicerie fine de produits belges",
+        image: "image/voisin.png",
+        adresses: [
+            "Avenue Reine Astrid 368, 7180 Seneffe"
+        ],
+        lien: "https://www.facebook.com/LaVoisineSeneffe/?locale=fr_FR"
+    },
+    {
+        nom: "Ferme Rabaey",
+        image: "image/fermer.png",
+        adresses: [
+            "Rue du Bois des Râves 123, 7100 La Louvière"
+        ],
+        lien: null
+    },
+    {
+        nom: "Pascal Hannotier, cellier Jocunditas",
+        image: "image/cellier.png",
+        adresses: [
+            "Rue des Déportés 35, 7070 Le Rœulx"
+        ],
+        lien: "https://www.facebook.com/pascal.hannotier/?locale=fr_FR"
+    },
+    {
+        nom: "Aux délices d'Ingrid",
+        image: "image/ingrid.jpg",
+        adresses: [
+            "Rue Neuve 19, 7160 Piéton"
+        ],
+        lien: "https://www.instagram.com/aux_delices_d_ingrid/"
+    },
+    {
+        nom: "Boucherie Deprez",
+        image: "image/deprez.jpg",
+        adresses: [
+            "Rue de Baume 180, 7100 La Louvière"
+        ],
+        lien: "https://boucheriedeprez-commande.be/#/commande-en-ligne/bons-plans/nos-produits"
+    },
+    {
+        nom: "Gorez boulangerie-pâtisserie",
+        image: "image/gorez.jpg",
+        adresses: [
+            "Rue Oscar Quertinmont 56, 7100 La Louvière",
+            "Rue Louis de Brouckère 91, 7100 La Louvière",
+            "Avenue Wanderpepen 27, 7130 Binche",
+            "Place de Carnières 23, 7141 Carnières"
+        ],
+        lien: "https://www.facebook.com/p/Gorez-Boulanger-P%C3%A2tissier-61574219774778/"
+    },
+    {
+        nom: "Les fromages de Christel",
+        image: "image/cricri.jpg",
+        adresses: [
+            "Chaussée du Rœulx 270, 7062 Naast"
+        ],
+        lien: null
+    }
+];
 
 var CLE_AGE = "hsb-age-ok";        // âge validé, mémorisé le temps de la visite
 var CLE_COORD = "hsb-coord-v1";    // positions calculées, gardées dans le navigateur
@@ -203,23 +303,8 @@ function formaterKm(km) {
     return km.toLocaleString("fr-BE", { maximumFractionDigits: 1 }) + " km";
 }
 
-// Lit les partenaires directement dans les cartes de la page
 function lirePartenaires() {
-    return Array.prototype.map.call(
-        document.querySelectorAll("#partenaires .card[data-adresses]"),
-        function (carteHtml) {
-            var titre = carteHtml.querySelector("h3").cloneNode(true);
-            Array.prototype.forEach.call(titre.querySelectorAll("br"), function (br) {
-                br.replaceWith(" – ");
-            });
-            var lien = carteHtml.querySelector("a");
-            return {
-                nom: titre.textContent.replace(/\s+/g, " ").trim(),
-                adresses: carteHtml.dataset.adresses.split("|"),
-                lien: lien ? lien.href : null
-            };
-        }
-    );
+    return PARTENAIRES;
 }
 
 function toutesLesAdresses(partenaires) {
@@ -272,18 +357,70 @@ function pluriel(n, singulier, plurielTexte) {
     return n + " " + (n > 1 ? plurielTexte : singulier);
 }
 
+// Affiche sous la carte une fiche par partenaire situé dans la zone (le plus proche d'abord)
 function remplirListe(lieux) {
-    var liste = document.getElementById("liste-proximite");
-    liste.replaceChildren();
+    var conteneur = document.getElementById("liste-proximite");
+    conteneur.replaceChildren();
 
+    // Regroupe les adresses par partenaire (Gorez en a quatre, par exemple)
+    var groupes = [];
+    var parNom = {};
     lieux.forEach(function (lieu) {
-        var li = document.createElement("li");
-        var nom = document.createElement("strong");
-        nom.textContent = lieu.nom;
-        li.appendChild(nom);
-        li.appendChild(document.createTextNode(" — " + lieu.adresse + " — " + formaterKm(lieu.km)));
-        liste.appendChild(li);
+        if (!parNom[lieu.nom]) {
+            parNom[lieu.nom] = { partenaire: lieu.partenaire, lieux: [] };
+            groupes.push(parNom[lieu.nom]);
+        }
+        parNom[lieu.nom].lieux.push(lieu);
     });
+    // Les lieux arrivent déjà triés par distance : les groupes le sont donc aussi
+
+    groupes.forEach(function (groupe) {
+        conteneur.appendChild(creerFichePartenaire(groupe.partenaire, groupe.lieux));
+    });
+}
+
+function creerFichePartenaire(partenaire, lieux) {
+    var fiche = document.createElement("div");
+    fiche.className = "card";
+
+    if (partenaire.image) {
+        var img = document.createElement("img");
+        img.src = partenaire.image;
+        img.alt = partenaire.nom;
+        img.loading = "lazy";
+
+        if (partenaire.lien) {
+            var lien = document.createElement("a");
+            lien.href = partenaire.lien;
+            lien.target = "_blank";
+            lien.rel = "noopener noreferrer";
+            lien.appendChild(img);
+            fiche.appendChild(lien);
+        } else {
+            fiche.appendChild(img);
+        }
+    }
+
+    var titre = document.createElement("h3");
+    titre.textContent = partenaire.nom;
+    fiche.appendChild(titre);
+
+    var adresses = document.createElement("p");
+    adresses.className = "adresse";
+    lieux.forEach(function (lieu, i) {
+        if (i > 0) {
+            adresses.appendChild(document.createElement("br"));
+            adresses.appendChild(document.createElement("br"));
+        }
+        adresses.appendChild(document.createTextNode(lieu.adresse));
+        adresses.appendChild(document.createElement("br"));
+        var distance = document.createElement("strong");
+        distance.textContent = formaterKm(lieu.km) + " (à vol d'oiseau)";
+        adresses.appendChild(distance);
+    });
+    fiche.appendChild(adresses);
+
+    return fiche;
 }
 
 function contenuPopup(lieu) {
@@ -368,7 +505,7 @@ function afficherResultats(contexte, rayonKm) {
                 return;
             }
             lieux.push({
-                nom: p.nom, adresse: adresse, lien: p.lien, lat: c[0], lng: c[1],
+                partenaire: p, nom: p.nom, adresse: adresse, lien: p.lien, lat: c[0], lng: c[1],
                 km: distanceKm(contexte.origine, { lat: c[0], lng: c[1] })
             });
         });

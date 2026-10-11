@@ -261,15 +261,13 @@ button.secondaire:hover {
     isolation: isolate;
 }
 
-#liste-proximite {
-    max-width: 800px;
-    margin: 0 auto 30px;
-    padding-left: 25px;
-    line-height: 1.6;
-}
-
 #liste-proximite:empty {
     display: none;
+}
+
+#liste-proximite {
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .pin {
@@ -453,6 +451,7 @@ footer p + p {
     .cards1 {
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
+
 }
 
 @media screen and (max-width: 768px) {
