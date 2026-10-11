@@ -22,6 +22,14 @@ var COORDONNEES = {};
    puis relance l'outil « index.html?coordonnees » (voir ci-dessus).
    ---------------------------------------------------------- */
 var PARTENAIRES = [
+       {
+        nom: "La ferme de scoumont",
+        image: "image/scoumont.png",
+        adresses: [
+            "Rue de scoumont 19, 7181 Arquennes"
+        ],
+        lien: "https://www.facebook.com/fermedescoumont/?locale=fr_FR"
+    },
     {
         nom: "Chez Raymond - Nathalie et Giovanni",
         image: "image/raymond.jpeg",
