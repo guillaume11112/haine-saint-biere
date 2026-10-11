@@ -5,29 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Haine-Saint-Bière : des bières artisanales brassées avec passion dans la région du Centre (Belgique).">
 <title>Haine-Saint-Bière</title>
+
+<!-- Icône de l'onglet (emoji intégré). Pour mettre ton logo : <link rel="icon" href="image/logo.png"> -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍺%3C/text%3E%3C/svg%3E">
+
+<!-- Cartes : Leaflet + fonds de carte OpenStreetMap -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <!-- Vérification d'âge -->
-<div id="age-popup">
+<div id="age-popup" role="dialog" aria-modal="true" aria-labelledby="titre-age">
     <div class="popup">
-        <h2>🍺 Vérification d'âge</h2>
+        <h2 id="titre-age">🍺 Vérification d'âge</h2>
         <p>Vous devez avoir 18 ans ou plus.</p>
 
-        <button onclick="entrer()">J'ai 18 ans</button>
-        <button onclick="quitter()">Non</button>
+        <button type="button" id="btn-oui">J'ai 18 ans</button>
+        <button type="button" id="btn-non">Non</button>
     </div>
 </div>
 
 <header>
     <h1>Haine-Saint-Bière</h1>
     <p>Des bières artisanales brassées avec passion.</p>
-    <button onclick="allerAuxBieres()">Découvrir</button>
+    <button type="button" id="btn-decouvrir">Découvrir</button>
 </header>
 
-<nav>
+<nav aria-label="Navigation principale">
     <ul>
         <li><a href="#biere">Nos bières</a></li>
         <li><a href="#about">Notre histoire</a></li>
@@ -37,35 +44,40 @@
     </ul>
 </nav>
 
+<main>
+
 <!-- Bières permanentes -->
 <section id="biere">
     <h2>Nos bières</h2>
 
     <div class="cards">
 
-        <div class="card" onclick="ouvrirBiere(
-            'Blonde',
-            '6,9%',
-            'Belgique',
-            'Une bière Blonde rafraichissante aux notes florales couplée d\'une légère amertume.')">
+        <div class="card" role="button" tabindex="0"
+             aria-label="Blonde : voir le détail"
+             data-nom="Blonde"
+             data-alcool="6,9%"
+             data-origine="Belgique"
+             data-description="Une bière blonde rafraîchissante aux notes florales couplée d'une légère amertume.">
             <img src="image/blonde.jpg" alt="Bière Blonde">
             <h3>Blonde</h3>
         </div>
 
-        <div class="card" onclick="ouvrirBiere(
-            'Brune',
-            '6,9%',
-            'Belgique',
-            'Une bière ronde aux arômes chaleureux de café torréfié et de chocolat.')">
+        <div class="card" role="button" tabindex="0"
+             aria-label="Brune : voir le détail"
+             data-nom="Brune"
+             data-alcool="6,9%"
+             data-origine="Belgique"
+             data-description="Une bière ronde aux arômes chaleureux de café torréfié et de chocolat.">
             <img src="image/brune.jpg" alt="Bière Brune">
             <h3>Brune</h3>
         </div>
 
-        <div class="card" onclick="ouvrirBiere(
-            'Ambrée',
-            '6,5%',
-            'Belgique',
-            'Une bière à l\'amertume subtile marquée par des saveurs de malt caramélisés.')">
+        <div class="card" role="button" tabindex="0"
+             aria-label="Ambrée : voir le détail"
+             data-nom="Ambrée"
+             data-alcool="6,5%"
+             data-origine="Belgique"
+             data-description="Une bière à l'amertume subtile marquée par des saveurs de malt caramélisé.">
             <img src="image/ambree.jpg" alt="Bière Ambrée">
             <h3>Ambrée</h3>
         </div>
@@ -73,26 +85,28 @@
     </div>
 </section>
 
-<!-- Bières de saison (id distinct : il était dupliqué avec "biere") -->
+<!-- Bières de saison -->
 <section id="saison">
     <h2>Nos bières de saison</h2>
 
     <div class="cards">
 
-        <div class="card" onclick="ouvrirBiere(
-            'Apicol',
-            '6,1%',
-            'Belgique',
-            'une bière aromatisée avec le produit des abeilles.')">
+        <div class="card" role="button" tabindex="0"
+             aria-label="Apicol : voir le détail"
+             data-nom="Apicol"
+             data-alcool="6,1%"
+             data-origine="Belgique"
+             data-description="Une bière aromatisée avec le produit des abeilles.">
             <img src="image/apicol.jpg" alt="Bière Apicol" loading="lazy">
             <h3>Apicol</h3>
         </div>
 
-        <div class="card" onclick="ouvrirBiere(
-            'Floricol',
-            '4,5%',
-            'Belgique',
-            'Une bière légère aux notes de fleurs de sureaux.')">
+        <div class="card" role="button" tabindex="0"
+             aria-label="Floricol : voir le détail"
+             data-nom="Floricol"
+             data-alcool="4,5%"
+             data-origine="Belgique"
+             data-description="Une bière légère aux notes de fleurs de sureau.">
             <img src="image/floricol.jpg" alt="Bière Floricol" loading="lazy">
             <h3>Floricol</h3>
         </div>
@@ -109,12 +123,12 @@
         La gamme de ces bières est réalisée hyper artisanalement !
         <br><img src="image/flo1.jpg" alt="Fabrication de la bière" width="300" loading="lazy"><br>
 
-        En effet, Alexandre maitrise l'entièreté du processus de production au sein d’une brasserie de 100l. De la sélection des matières premières à l'embouteillage et l'étiquetage, rien n'est laissé au hasard ! La gamme originale est composée de 3 sortes : une blonde aux notes florales, une ambrée possédant une légère amertume et un goût torréfié ainsi qu’une brune forte pour les connaisseurs.
+        En effet, Alexandre maîtrise l'entièreté du processus de production au sein d’une brasserie de 100l. De la sélection des matières premières à l'embouteillage et l'étiquetage, rien n'est laissé au hasard ! La gamme originale est composée de 3 sortes : une blonde aux notes florales, une ambrée possédant une légère amertume et un goût torréfié ainsi qu’une brune forte pour les connaisseurs.
         <br><img src="image/flo2.jpg" alt="Brasserie" style="padding-right:10px;" width="210" loading="lazy"><img src="image/fabrication5.jpg" alt="Fabrication de la bière" width="319" loading="lazy"><br>
 
-        Avec le temps et par soif de créativité, deux nouvelles bières se sont ajoutées au catalogue : une bière aromatisée avec le produit des abeilles, le miel - l’ApiCol - et une bière légère et rafraichissante à la fleur de sureau - la FloriCol.
+        Avec le temps et par soif de créativité, deux nouvelles bières se sont ajoutées au catalogue : une bière aromatisée avec le produit des abeilles, le miel - l’ApiCol - et une bière légère et rafraîchissante à la fleur de sureau - la FloriCol.
 
-        Si vous désirez gouter une bière artisanale de la région du Centre, n’hésitez pas à venir sur le Stand d’Haine-Saint-Bière.
+        Si vous désirez goûter une bière artisanale de la région du Centre, n’hésitez pas à venir sur le Stand d’Haine-Saint-Bière.
         <br><img src="image/flo.jpg" alt="Le stand Haine-Saint-Bière" width="150" loading="lazy"><br>
     </p>
 </section>
@@ -125,11 +139,11 @@
     <div class="cards">
 
         <div class="card">
-            <a href="https://www.facebook.com/p/March%C3%A9-des-saveurs-Manage-100076330412872/">
+            <a href="https://www.facebook.com/p/March%C3%A9-des-saveurs-Manage-100076330412872/" target="_blank" rel="noopener noreferrer">
                 <img src="image/marché.jpg" alt="Marché des saveurs de Manage" loading="lazy">
             </a>
             <h3>Marché des saveurs de la commune de Manage</h3>
-            <p class="adresse"><br>Centre culturel et sportif Le Scailmont <br> Avenue du Scailmont, Manage, Belgium, 7170</p>
+            <p class="adresse"><br>Centre culturel et sportif Le Scailmont <br> Avenue du Scailmont, 7170 Manage, Belgique</p>
         </div>
 
         <!--
@@ -146,129 +160,78 @@
 <section id="partenaires">
     <h2>Nos partenaires</h2>
 
-    <div class="cards1">
+    <!-- Recherche par distance : saisis ton adresse, choisis un rayon, la carte affiche les partenaires -->
+    <form id="form-proximite" class="proximite" novalidate>
+        <h3>Trouver un partenaire près de chez vous</h3>
 
-        <div class="card">
-            <a href="https://www.facebook.com/p/Chez-Raymond-Nathalie-Giovanni-100063481123877/?locale=fr_FR">
-                <img src="image/raymond.jpeg" alt="Chez Raymond" loading="lazy">
-            </a>
-            <h3>Chez raymond- Nathalie et Giovanni</h3>
-            <p><br>Rue des Combattants 50<br> 7100 La Louvière</p>
+        <div class="proximite-champs">
+            <div class="champ">
+                <label for="adresse">Votre adresse</label>
+                <input type="text" id="adresse" name="adresse" autocomplete="street-address"
+                       placeholder="Ex. : Rue Neuve 1, 7100 La Louvière">
+            </div>
+
+            <div class="champ petit">
+                <label for="rayon">Distance</label>
+                <select id="rayon" name="rayon">
+                    <option value="5">5 km</option>
+                    <option value="10" selected>10 km</option>
+                    <option value="20">20 km</option>
+                    <option value="30">30 km</option>
+                    <option value="50">50 km</option>
+                </select>
+            </div>
+
+            <div class="actions">
+                <button type="submit">Rechercher</button>
+                <button type="button" id="btn-position" class="secondaire">📍 Ma position</button>
+            </div>
         </div>
 
-        <div class="card">
-            <a href="https://www.facebook.com/profile.php?id=100063470713775#">
-                <img src="image/chalet.jpeg" alt="Le chalet des étangs" loading="lazy">
-            </a>
-            <h3>Le chalet des étangs</h3>
-            <p><br>Rue des Etangs 9<br> 7100 La Louvière</p>
-        </div>
+        <p class="note">Distance à vol d'oiseau, adresses en Belgique. Votre adresse sert uniquement à lancer la recherche : ce site ne l'enregistre pas (voir les mentions légales).</p>
+    </form>
 
-        <div class="card">
-            <a href="https://fermelegat.be/">
-                <img src="image/fermel.jpeg" alt="Ferme Legat" loading="lazy">
-            </a>
-            <h3>Ferme Legat, grange gourmande</h3>
-            <p><br>Rue de Binche 33 <br>7120 Estinnes</p>
-        </div>
+    <div id="resultat-proximite" aria-live="polite"></div>
+    <div id="carte-partenaires" hidden></div>
+    <!-- Fiches des partenaires situés dans la zone recherchée (remplies par script.js) -->
+    <div id="liste-proximite" class="cards1"></div>
 
-        <div class="card">
-            <a href="https://www.facebook.com/p/Au-sourire-de-la-Cr%C3%A9mi%C3%A8re-Ferme-de-la-Ravis%C3%A9e-100069854415944/?locale=fr_FR">
-                <img src="image/creme.png" alt="Au sourire de la crémière" loading="lazy">
-            </a>
-            <h3>Au sourire de la crémière - Ferme de la Ravisée</h3>
-            <p><br>Chau. de Nivelles 2 <br>7181 Seneffe</p>
-        </div>
-
-        <div class="card">
-            <a href="https://www.facebook.com/LaVoisineSeneffe/?locale=fr_FR">
-                <img src="image/voisin.png" alt="La Voisine, épicerie fine" loading="lazy">
-            </a>
-            <h3>La Voisine <br>Épicerie fine de produits belges</h3>
-            <p><br>Av. Reine Astrid 368 <br>7180 Seneffe</p>
-        </div>
-
-        <!-- Pas de lien renseigné : l'image n'est plus enveloppée dans un <a href=""> -->
-        <div class="card">
-            <img src="image/fermer.png" alt="Ferme Rabaey" loading="lazy">
-            <h3>Ferme Rabaey</h3>
-            <p><br>Rue du Bois des Râves 123<br> 7100 La Louvière</p>
-        </div>
-
-        <div class="card">
-            <a href="https://www.facebook.com/pascal.hannotier/?locale=fr_FR">
-                <img src="image/cellier.png" alt="Cellier Jocunditas" loading="lazy">
-            </a>
-            <h3>Pascal Hannotier cellier jocunditas</h3>
-            <p><br>Rue des Déportés 35 <br> 7070 Le Rœulx</p>
-        </div>
-
-        <div class="card">
-            <a href="https://www.instagram.com/aux_delices_d_ingrid/">
-                <img src="image/ingrid.jpg" alt="Aux délices d'Ingrid" loading="lazy">
-            </a>
-            <h3>Aux délices d'ingrid</h3>
-            <p><br>boutique de produits artisanaux
-            <br>19 rue Neuve 7160 Piéton</p>
-        </div>
-
-        <div class="card">
-            <a href="https://boucheriedeprez-commande.be/#/commande-en-ligne/bons-plans/nos-produits">
-                <img src="image/deprez.jpg" alt="Boucherie Deprez" loading="lazy">
-            </a>
-            <h3>Boucherie Deprez</h3>
-            <p><br>Rue de baume 180 <br> 7100 la louvière</p>
-        </div>
-
-        <div class="card">
-            <a href="https://www.facebook.com/p/Gorez-Boulanger-P%C3%A2tissier-61574219774778/">
-                <img src="image/gorez.jpg" alt="Gorez boulangerie-pâtisserie" loading="lazy">
-            </a>
-            <h3>Gorez boulangerie-patisserie</h3>
-            <p><br>-Trivières : 56, Rue Oscar Quertinmont<br> -La Louvière : 91, Rue Louis de Brouckère<br>-Binche : 27, Avenue Wanderpepen<br>-Carnières : 23, Place de Carnières</p>
-        </div>
-
-        <!-- Pas de lien renseigné : l'image n'est plus enveloppée dans un <a href=""> -->
-        <div class="card">
-            <img src="image/cricri.jpg" alt="Les fromages de Christel" loading="lazy">
-            <h3>Les fromages de Christel</h3>
-            <p><br>Chaussée du roeulx 270 <br> 7062 Naast</p>
-        </div>
-
-    </div>
 </section>
 
 <section id="contact">
     <h2>Contact</h2>
 
     <p class="infos">
-        📍 7110 boussoit, chemin des vaches n°7 <br><br>
+        📍 Chemin des Vaches n° 7, 7110 Boussoit <br><br>
 
-        📞 0493/59.78.67<br><br>
+        📞 <a href="tel:+32493597867">0493/59.78.67</a><br><br>
 
-        ✉ hainesaintbiere@gmail.com
+        ✉ <a href="mailto:hainesaintbiere@gmail.com">hainesaintbiere@gmail.com</a>
         <br><br>
         TVA : BE 0771.491.082
 
         <br><br>
 
-        <a href="https://www.instagram.com/hainesaintbiere/">
+        <a href="https://www.instagram.com/hainesaintbiere/" target="_blank" rel="noopener noreferrer">
             <img src="image/insta.png" class="reseau" alt="Instagram">
         </a>
-        <a href="https://www.facebook.com/HaineSaintBiere/">
+        <a href="https://www.facebook.com/HaineSaintBiere/" target="_blank" rel="noopener noreferrer">
             <img src="image/fac.png" class="reseau" alt="Facebook">
         </a>
     </p>
 </section>
 
+</main>
+
 <footer>
     <p>© 2026 Haine-Saint-Bière - L'abus d'alcool est dangereux pour la santé.</p>
+    <p><button type="button" id="lien-mentions" class="lien-discret">Mentions légales</button></p>
 </footer>
 
 <!-- Popup de détail d'une bière -->
-<div id="popup1" class="popup1">
+<div id="popup1" class="popup1" role="dialog" aria-modal="true" aria-labelledby="titre">
     <div class="popup1-content">
-        <span class="close" onclick="fermerPopup1()">&times;</span>
+        <span class="close" role="button" tabindex="0" aria-label="Fermer">&times;</span>
 
         <h2 id="titre"></h2>
 
@@ -282,6 +245,30 @@
     </div>
 </div>
 
+<!-- Popup des mentions légales -->
+<div id="popup-mentions" class="popup1" role="dialog" aria-modal="true" aria-labelledby="titre-mentions">
+    <div class="popup1-content">
+        <span class="close" role="button" tabindex="0" aria-label="Fermer">&times;</span>
+
+        <h2 id="titre-mentions">Mentions légales</h2>
+
+        <p><strong>Éditeur du site :</strong> Haine-Saint-Bière</p>
+
+        <p><strong>Adresse :</strong> Chemin des Vaches n° 7, 7110 Boussoit (Belgique)</p>
+
+        <p><strong>Contact :</strong> 0493/59.78.67 - hainesaintbiere@gmail.com</p>
+
+        <p><strong>Numéro de TVA :</strong> BE 0771.491.082</p>
+
+        <p><strong>Santé :</strong> L'abus d'alcool est dangereux pour la santé. À consommer avec modération. Réservé aux personnes de 18 ans et plus.</p>
+
+        <p><strong>Cookies et données :</strong> ce site ne dépose aucun cookie. Votre réponse à la vérification d'âge est mémorisée uniquement le temps de votre visite, dans votre navigateur.</p>
+
+        <p><strong>Recherche de partenaires :</strong> l'adresse que vous saisissez (ou votre position, si vous l'autorisez) sert uniquement à calculer la recherche. Elle est transmise au service OpenStreetMap Nominatim pour être convertie en position, et la carte est fournie par OpenStreetMap. Ce site ne l'enregistre pas. La position des partenaires est gardée dans votre navigateur pour accélérer les recherches suivantes.</p>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
