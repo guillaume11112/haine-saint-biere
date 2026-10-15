@@ -121,7 +121,7 @@ var PARTENAIRES = [
    d'activation reçu par e-mail (regarde aussi dans les courriers
    indésirables). Ensuite, chaque message arrive dans ta boîte mail.
    ---------------------------------------------------------- */
-var ADRESSE_CONTACT = "hainesaintbiere@gmail.com";
+var ADRESSE_CONTACT = "duerinckx.g@outlook.com";
 var URL_FORMULAIRE = "https://formsubmit.co/ajax/" + ADRESSE_CONTACT;
 
 var CLE_AGE = "hsb-age-ok";        // âge validé, mémorisé le temps de la visite
