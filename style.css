@@ -194,7 +194,8 @@ button:focus-visible {
 }
 
 .proximite input,
-.proximite select {
+.proximite select,
+.proximite textarea {
     padding: 12px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -217,7 +218,8 @@ button:focus-visible {
 
 .proximite button:disabled,
 .proximite input:disabled,
-.proximite select:disabled {
+.proximite select:disabled,
+.proximite textarea:disabled {
     opacity: .6;
     cursor: wait;
 }
@@ -227,14 +229,6 @@ button:focus-visible {
     color: #666;
     margin-top: 12px;
     text-align: center;
-}
-
-button.secondaire {
-    background: #555;
-}
-
-button.secondaire:hover {
-    background: #333;
 }
 
 #resultat-proximite {
@@ -314,13 +308,74 @@ button.secondaire:hover {
     max-width: 100%;
 }
 
-#contact .infos {
-    text-align: center;
-    font-size: 20px;
+.contact-grille {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: start;
 }
 
-#contact .infos a {
+.contact-grille .proximite {
+    margin: 0;
+    max-width: none;
+}
+
+.contact-infos {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
+    text-align: center;
+    line-height: 1.8;
+}
+
+.contact-infos p + p {
+    margin-top: 14px;
+}
+
+.contact-infos a {
     color: inherit;
+}
+
+.proximite textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.champs-colonne {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.champs-colonne .champ {
+    flex: none;
+}
+
+/* Piège à robots du formulaire : hors écran */
+.piege {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+#resultat-contact {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+#resultat-contact.ok {
+    color: #2e7d32;
+}
+
+#resultat-contact.erreur {
+    color: #b00020;
 }
 
 .reseau {
@@ -514,7 +569,11 @@ footer p + p {
         padding: 18px;
     }
 
-    #contact .infos {
+    .contact-grille {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-infos {
         font-size: 16px;
     }
 

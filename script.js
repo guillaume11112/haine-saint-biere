@@ -22,14 +22,6 @@ var COORDONNEES = {};
    puis relance l'outil « index.html?coordonnees » (voir ci-dessus).
    ---------------------------------------------------------- */
 var PARTENAIRES = [
-       {
-        nom: "La ferme de scoumont",
-        image: "image/scoumont.png",
-        adresses: [
-            "Rue de scoumont 19, 7181 Arquennes"
-        ],
-        lien: "https://www.facebook.com/fermedescoumont/?locale=fr_FR"
-    },
     {
         nom: "Chez Raymond - Nathalie et Giovanni",
         image: "image/raymond.jpeg",
@@ -122,6 +114,15 @@ var PARTENAIRES = [
         lien: null
     }
 ];
+
+/* ----------------------------------------------------------
+   Formulaire de contact : envoi par e-mail via FormSubmit (gratuit).
+   Première fois : envoie un message test, puis clique sur le lien
+   d'activation reçu par e-mail (regarde aussi dans les courriers
+   indésirables). Ensuite, chaque message arrive dans ta boîte mail.
+   ---------------------------------------------------------- */
+var ADRESSE_CONTACT = "hainesaintbiere@gmail.com";
+var URL_FORMULAIRE = "https://formsubmit.co/ajax/" + ADRESSE_CONTACT;
 
 var CLE_AGE = "hsb-age-ok";        // âge validé, mémorisé le temps de la visite
 var CLE_COORD = "hsb-coord-v1";    // positions calculées, gardées dans le navigateur
@@ -571,25 +572,10 @@ function origineParAdresse() {
     });
 }
 
-function origineParPosition() {
-    return new Promise(function (resolve, reject) {
-        if (!navigator.geolocation) {
-            reject(erreur("GEO"));
-            return;
-        }
-        navigator.geolocation.getCurrentPosition(function (pos) {
-            resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude, libelle: "votre position" });
-        }, function () {
-            reject(erreur("GEO"));
-        }, { timeout: 10000 });
-    });
-}
-
 var MESSAGES_ERREUR = {
     VIDE: "Saisissez d'abord une adresse.",
     INTROUVABLE: "Adresse introuvable. Essayez avec le code postal et la commune (ex. : Rue Neuve 1, 7100 La Louvière). Seules les adresses en Belgique sont reconnues.",
-    RESEAU: "Le service de recherche d'adresses ne répond pas. Réessayez dans un instant.",
-    GEO: "Impossible d'obtenir votre position. Autorisez la localisation ou saisissez votre adresse."
+    RESEAU: "Le service de recherche d'adresses ne répond pas. Réessayez dans un instant."
 };
 
 function lancerRecherche(obtenirOrigine) {
@@ -618,6 +604,77 @@ function lancerRecherche(obtenirOrigine) {
     }).then(function () {
         occupe = false;
         basculerBoutons(false);
+    });
+}
+
+/* ----- Formulaire de contact ----- */
+
+function afficherResultatContact(texte, type) {
+    var zone = document.getElementById("resultat-contact");
+    zone.textContent = texte;
+    zone.classList.toggle("ok", type === "ok");
+    zone.classList.toggle("erreur", type === "erreur");
+}
+
+function envoyerContact(event) {
+    event.preventDefault();
+
+    var formulaire = event.target;
+    var bouton = document.getElementById("btn-envoyer");
+    var nom = formulaire.elements["nom"].value.trim();
+    var email = formulaire.elements["email"].value.trim();
+    var sujet = formulaire.elements["sujet"].value;
+    var message = formulaire.elements["message"].value.trim();
+
+    // Champ piège rempli = robot : on fait semblant que tout va bien, sans rien envoyer
+    if (formulaire.elements["_honey"].value) {
+        afficherResultatContact("Merci ! Votre message est bien parti.", "ok");
+        return;
+    }
+
+    if (!nom) {
+        afficherResultatContact("Indiquez votre nom.", "erreur");
+        return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        afficherResultatContact("Indiquez une adresse e-mail valide pour que nous puissions vous répondre.", "erreur");
+        return;
+    }
+    if (message.length < 5) {
+        afficherResultatContact("Écrivez votre message.", "erreur");
+        return;
+    }
+
+    bouton.disabled = true;
+    afficherResultatContact("Envoi en cours…", null);
+
+    fetch(URL_FORMULAIRE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+            name: nom,
+            email: email,
+            sujet: sujet,
+            message: message,
+            _subject: "Site Haine-Saint-Bière : " + sujet,
+            _replyto: email,
+            _template: "table",
+            _captcha: "false"
+        })
+    }).then(function (reponse) {
+        return reponse.json().then(function (donnees) {
+            if (!reponse.ok || !(donnees.success === true || donnees.success === "true")) {
+                throw erreur("ENVOI");
+            }
+        });
+    }).then(function () {
+        formulaire.reset();
+        afficherResultatContact("Merci ! Votre message est bien parti. Nous vous répondons rapidement.", "ok");
+    }).catch(function () {
+        afficherResultatContact("L'envoi a échoué. Écrivez-nous directement à " + ADRESSE_CONTACT +
+            " ou appelez le 0493/59.78.67.", "erreur");
+    }).then(function () {
+        bouton.disabled = false;
     });
 }
 
@@ -668,6 +725,17 @@ function outilCoordonnees() {
 /* ---------- Mise en route ---------- */
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    // Sécurité : vérifie que index.html et script.js sont de la même version
+    var attendus = ["age-popup", "btn-oui", "btn-non", "btn-decouvrir", "biere", "popup1",
+                    "popup-mentions", "lien-mentions", "form-proximite", "adresse", "rayon",
+                    "resultat-proximite", "carte-partenaires", "liste-proximite", "form-contact"];
+    var manquants = attendus.filter(function (id) { return !document.getElementById(id); });
+    if (manquants.length) {
+        console.error("index.html n'est pas à jour : éléments introuvables (" + manquants.join(", ") +
+                      "). Remplace index.html, style.css et script.js par les trois derniers fichiers.");
+        return;
+    }
 
     // Âge : déjà validé pendant cette visite ? on n'affiche pas le popup
     if (lireAge()) {
@@ -725,9 +793,9 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         lancerRecherche(origineParAdresse);
     });
-    document.getElementById("btn-position").addEventListener("click", function () {
-        lancerRecherche(origineParPosition);
-    });
+
+    // Formulaire de contact
+    document.getElementById("form-contact").addEventListener("submit", envoyerContact);
 
     // Outil de calcul des coordonnées (index.html?coordonnees)
     if (/[?&]coordonnees\b/.test(window.location.search)) {
