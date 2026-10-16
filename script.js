@@ -215,6 +215,7 @@ function ouvrirBiere(carte) {
     document.getElementById("alcool").textContent = carte.dataset.alcool;
     document.getElementById("origine").textContent = carte.dataset.origine;
     document.getElementById("description").textContent = carte.dataset.description;
+   document.getElementById("format").textContent = carte.dataset.format;
 
     ouvrirPopup("popup1", carte);
 }
