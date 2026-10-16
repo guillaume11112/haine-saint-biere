@@ -107,7 +107,25 @@ nav a {
     gap: 25px;
     align-items: start;
 }
+:root {
+    --or: #d4a017;
+    --blonde: #e8b923;
+    --brune: #6b3e26;
+    --ambree: #c8671f;
+    --apicol: #f0a830;
+    --floricol: #9bbf6a;
+}
 
+/* Bandeau de couleur au-dessus des cartes de bière */
+.card[data-nom] {
+    border-top: 7px solid var(--or);
+}
+
+.card[data-nom="Blonde"]   { border-top-color: var(--blonde); }
+.card[data-nom="Brune"]    { border-top-color: var(--brune); }
+.card[data-nom="Ambrée"]   { border-top-color: var(--ambree); }
+.card[data-nom="Apicol"]   { border-top-color: var(--apicol); }
+.card[data-nom="Floricol"] { border-top-color: var(--floricol); }
 .card {
     background: white;
     border-radius: 10px;
