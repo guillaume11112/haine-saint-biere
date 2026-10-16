@@ -476,6 +476,15 @@ footer p + p {
     color: #b8860b;
 }
 
+
+:root {
+    --or: #d4a017;
+    --blonde: #e8b923;
+    --brune: #6b3e26;
+    --ambree: #c8671f;
+    --apicol: #f0a830;
+    --floricol: #9bbf6a;
+}
 /* Petite barre dorée sous les titres de section */
 section > h2::after {
     content: "";
@@ -486,15 +495,6 @@ section > h2::after {
     border-radius: 2 px;
     background: linear-gradient (90 deg, var (--or), #f3d27a, var (--or));
 }
-:root {
-    --or: #d4a017;
-    --blonde: #e8b923;
-    --brune: #6b3e26;
-    --ambree: #c8671f;
-    --apicol: #f0a830;
-    --floricol: #9bbf6a;
-}
-
 /* Bandeau de couleur au-dessus des cartes de bière */
 .card[data-nom] {
     border-top: 7px solid var(--or);
