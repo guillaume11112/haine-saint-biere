@@ -475,6 +475,17 @@ footer p + p {
     margin-bottom: 20px;
     color: #b8860b;
 }
+
+/* Petite barre dorée sous les titres de section */
+section > h2::after {
+    content: "";
+    display: block;
+    width: 70 px;
+    height: 4 px;
+    margin: 12 px auto 0;
+    border-radius: 2 px;
+    background: linear-gradient (90 deg, var (--or), #f3d27a, var (--or));
+}
 :root {
     --or: #d4a017;
     --blonde: #e8b923;
