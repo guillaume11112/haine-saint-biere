@@ -12,8 +12,8 @@
 }
 
 body {
-    color: #333;
-   background: linear-gradient (180 deg, #f7efe0, #ecdcb8);
+   color: #333;
+   background: linear-gradient(180deg, #f7efe0, #ecdcb8);
 }
 
 /* Empêche le défilement de la page quand un popup est ouvert */
