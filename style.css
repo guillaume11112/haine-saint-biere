@@ -148,7 +148,7 @@ button:focus-visible {
 
 /* ---------- Recherche de partenaires par distance ---------- */
 .proximite {
-    background: white;
+    background-color: white;
     border-radius: 10px;
     padding: 25px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
