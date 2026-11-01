@@ -148,7 +148,7 @@ button:focus-visible {
 
 /* ---------- Recherche de partenaires par distance ---------- */
 .proximite {
-    background-color: white;
+    background: white;
     border-radius: 10px;
     padding: 25px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
@@ -157,6 +157,7 @@ button:focus-visible {
 }
 
 .proximite h3 {
+    background: white;
     text-align: center;
     color: #b8860b;
     margin-bottom: 15px;
@@ -306,15 +307,17 @@ button:focus-visible {
     max-width: 1000px;
     margin: 0 auto;
     align-items: start;
-   background: white;
+    background: white;
 }
 
 .contact-grille .proximite {
+    background: white;
     margin: 0;
     max-width: none;
 }
 
 .contact-infos {
+    background: white;
     border-radius: 10px;
     padding: 25px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
