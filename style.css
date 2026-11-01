@@ -12,9 +12,8 @@
 }
 
 body {
-    background: #f5f5f5;
     color: #333;
-   background: linear-gradient(180deg, #f7efe0, #ecdcb8);
+   background: linear-gradient (180 deg, #f7efe0, #ecdcb8);
 }
 
 /* Empêche le défilement de la page quand un popup est ouvert */
@@ -149,7 +148,6 @@ button:focus-visible {
 
 /* ---------- Recherche de partenaires par distance ---------- */
 .proximite {
-    background: white;
     border-radius: 10px;
     padding: 25px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
@@ -292,7 +290,6 @@ button:focus-visible {
 
 /* ---------- Sections ---------- */
 #about {
-    background: white;
     line-height: 1.8;
     text-align: center;
 }
@@ -316,7 +313,6 @@ button:focus-visible {
 }
 
 .contact-infos {
-    background: white;
     border-radius: 10px;
     padding: 25px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, .15);
