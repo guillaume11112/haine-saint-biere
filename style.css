@@ -13,7 +13,7 @@
 
 body {
    color: #333;
-   background: linear-gradient(180deg, #f7efe0, #ecdcb8);
+   background:linear-gradient(180deg, #f7efe0, #ecdcb8);
 }
 
 /* Empêche le défilement de la page quand un popup est ouvert */
@@ -490,7 +490,7 @@ section > h2::after {
     height: 4px;
     margin: 12px auto 0;
     border-radius: 2px;
-    background: linear-gradient(90deg, var (--or), #f3d27a, var (--or));
+    background: linear-gradient(90deg, var(--or), #f3d27a, var(--or));
 }
 /* Bandeau de couleur au-dessus des cartes de bière */
 .card[data-nom] {
